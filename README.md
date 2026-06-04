@@ -1,36 +1,198 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🚨 ResQ-Now — Emergency Resource Connect
 
-First, run the development server:
+**A real-time, community-powered emergency resource sharing platform**  
+Connecting citizens, volunteers, NGOs, hospitals, and donors during emergencies for faster coordination and response.
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+</div>
+
+---
+
+## 📖 Table of Contents
+
+- [About](#-about)
+- [Features](#-features)
+- [Tech Stack](#️-tech-stack)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Supabase Setup](#-supabase-setup)
+- [Deployment](#-deployment-vercel)
+- [Future Improvements](#-future-improvements)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
+
+---
+
+## 🌟 About
+
+**ResQ-Now** is an open-source emergency resource coordination platform built to save lives by bridging the gap between those in need and those who can help. During disasters and emergencies, every second counts — ResQ-Now enables real-time communication and resource sharing between citizens, volunteers, NGOs, hospitals, and donors.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 📍 **Emergency Requests** | Real-time posting and tracking of emergency requests |
+| 🗺️ **Location-Based Tracking** | Map-integrated resource and volunteer tracking |
+| 🧑‍🤝‍🧑 **Volunteer & NGO Coordination** | Structured system for volunteers and organizations to coordinate |
+| 🩸 **Resource & Blood Requests** | Dedicated blood donation and resource request system |
+| 🔐 **Authentication** | Secure user authentication powered by Supabase Auth |
+| ⚡ **Real-Time Updates** | Live database synchronization using Supabase Realtime |
+| 📱 **Responsive UI** | Fast, mobile-friendly interface built with Next.js App Router |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 16 (App Router), React |
+| **Backend** | Supabase (PostgreSQL + Auth + Realtime) |
+| **Styling** | Tailwind CSS |
+| **Deployment** | Vercel |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or higher
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- A [Supabase](https://supabase.com/) account
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/shiwanijha48-bot/ResQ-Now.git
+cd ResQ-Now
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Setup Environment Variables
+
+Create a `.env.local` file in the root directory and add your Supabase credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+> 🔒 **Never commit your `.env.local` file.** It is already listed in `.gitignore`.
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Project Structure
 
-## Learn More
+```
+ResQ-Now/
+├── app/                # Pages and routes (Next.js App Router)
+├── components/         # Reusable UI components
+├── lib/                # Supabase client configuration
+├── public/             # Static assets (images, icons)
+├── .env.local          # Environment variables (not committed)
+├── tailwind.config.js  # Tailwind CSS configuration
+└── next.config.js      # Next.js configuration
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔥 Supabase Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Go to [https://supabase.com](https://supabase.com) and sign in
+2. Click **New Project** and fill in the details
+3. Once the project is ready, go to **Project Settings → API**
+4. Copy the following values:
+   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+   - **Anon / Public Key** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+5. Paste them into your `.env.local` file
 
-## Deploy on Vercel
+> 💡 You may also need to create your database tables. Check the `/lib` folder for schema references.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🌐 Deployment (Vercel)
+
+Deploying ResQ-Now to Vercel is quick and straightforward:
+
+1. Push your project to [GitHub](https://github.com/)
+2. Go to [https://vercel.com](https://vercel.com) and sign in
+3. Click **Add New Project** and import your repository
+4. Under **Environment Variables**, add:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+5. Click **Deploy 🚀**
+
+Your app will be live at a `*.vercel.app` URL within minutes.
+
+---
+
+## 📌 Future Improvements
+
+# 🤖 AI-based emergency matching system
+# 📲 SMS / WhatsApp alert notifications
+# 🛡️ Admin dashboard for monitoring requests
+# 📱 Mobile app version (React Native)
+# ✅ Verified volunteer badge system
+# 🌍 Multi-language support
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome and appreciated! Here's how to get started:
+
+1. **Fork** the repository
+2. **Create** your feature branch: `git checkout -b feature/your-feature-name`
+3. **Commit** your changes: `git commit -m 'Add: your feature description'`
+4. **Push** to the branch: `git push origin feature/your-feature-name`
+5. **Open** a Pull Request
+
+> For major changes, please open an **Issue** first to discuss what you'd like to change.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💡 Author
+
+<div align="center">
+
+Built with ❤️ by **Shiwani Jha**
+
+[![GitHub](https://img.shields.io/badge/GitHub-shiwanijha48--bot-181717?style=for-the-badge&logo=github)](https://github.com/shiwanijha48-bot)
+
+*If you find this project helpful, please consider giving it a ⭐ on GitHub!*
+
+</div>
