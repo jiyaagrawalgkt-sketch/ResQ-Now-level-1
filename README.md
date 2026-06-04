@@ -8,32 +8,15 @@ Connecting citizens, volunteers, NGOs, hospitals, and donors during emergencies 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 </div>
 
----
-
-## 📖 Table of Contents
-
-- [About](#-about)
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Supabase Setup](#-supabase-setup)
-- [Deployment](#-deployment-vercel)
-- [Future Improvements](#-future-improvements)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
 
 ---
 
 ## 🌟 About
 
-**ResQ-Now** is an open-source emergency resource coordination platform built to save lives by bridging the gap between those in need and those who can help. During disasters and emergencies, every second counts — ResQ-Now enables real-time communication and resource sharing between citizens, volunteers, NGOs, hospitals, and donors.
+**ResQ-Now** is an emergency resource coordination platform built to save lives by bridging the gap between those in need and those who can help. During disasters and emergencies, every second counts — ResQ-Now enables real-time communication and resource sharing between citizens, volunteers, NGOs, hospitals, and donors.
 
 ---
 
@@ -55,10 +38,9 @@ Connecting citizens, volunteers, NGOs, hospitals, and donors during emergencies 
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | Next.js 16 (App Router), React |
-| **Backend** | Supabase (PostgreSQL + Auth + Realtime) |
+| **Frontend** | Next.js 16 |
+| **Backend** | Supabase |
 | **Styling** | Tailwind CSS |
-| **Deployment** | Vercel |
 
 ---
 
@@ -137,30 +119,14 @@ ResQ-Now/
 
 ---
 
-## 🌐 Deployment (Vercel)
-
-Deploying ResQ-Now to Vercel is quick and straightforward:
-
-1. Push your project to [GitHub](https://github.com/)
-2. Go to [https://vercel.com](https://vercel.com) and sign in
-3. Click **Add New Project** and import your repository
-4. Under **Environment Variables**, add:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-5. Click **Deploy 🚀**
-
-Your app will be live at a `*.vercel.app` URL within minutes.
-
----
-
 ## 📌 Future Improvements
 
-# 🤖 AI-based emergency matching system
-# 📲 SMS / WhatsApp alert notifications
-# 🛡️ Admin dashboard for monitoring requests
-# 📱 Mobile app version (React Native)
-# ✅ Verified volunteer badge system
-# 🌍 Multi-language support
+1. 🤖 AI-based emergency matching system
+2. 📲 SMS / WhatsApp alert notifications
+3. 🛡️ Admin dashboard for monitoring requests
+4. 📱 Mobile app version (React Native)
+5. ✅ Verified volunteer badge system
+6. 🌍 Multi-language support
 
 ---
 
@@ -178,12 +144,6 @@ Contributions are welcome and appreciated! Here's how to get started:
 
 ---
 
-## 📜 License
-
-This project is licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for details.
-
----
 
 ## 💡 Author
 
