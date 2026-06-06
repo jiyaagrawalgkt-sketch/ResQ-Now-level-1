@@ -94,7 +94,7 @@ export default function RequestsPage() {
       return;
     }
 
-    alert("🤝 Request accepted successfully");
+    alert(" Request accepted successfully");
   };
 
   const cities = [
@@ -121,7 +121,7 @@ export default function RequestsPage() {
 
         {/* HEADER */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold">🚨 Emergency Requests</h1>
+          <h1 className="text-4xl font-bold"> Emergency Requests</h1>
           <p className="text-gray-600 mt-2">
             Help people in need by accepting requests.
           </p>
@@ -169,7 +169,7 @@ export default function RequestsPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
-            {/* ✅ FIXED: Single .map() call with matchingOffers computed inside */}
+            {/*  FIXED: Single .map() call with matchingOffers computed inside */}
             {filteredRequests.map((req) => {
               const matchingOffers = offers.filter(
                 (offer) =>
@@ -187,7 +187,7 @@ export default function RequestsPage() {
                   {req.is_sos && (
                     <div className="mb-4">
                       <span className="bg-red-600 text-white px-3 py-1 rounded-full animate-pulse text-sm font-semibold">
-                        🚨 SOS EMERGENCY
+                         SOS EMERGENCY
                       </span>
                     </div>
                   )}
@@ -213,14 +213,14 @@ export default function RequestsPage() {
                   {/* Details */}
                   <div className="space-y-2 text-gray-700">
                     <p>
-                      <strong>👤 Name:</strong> {req.name}
+                      <strong> Name:</strong> {req.name}
                     </p>
                     <p>
-                      <strong>📞 Phone:</strong> {req.phone}
+                      <strong> Phone:</strong> {req.phone}
                     </p>
                     <div>
                     <p>
-                      <strong>📍 Location:</strong> {req.location}
+                      <strong> Location:</strong> {req.location}
                       {req.city && (
                         <div className="text-sm text-gray-500">
                           {req.city}
@@ -260,7 +260,7 @@ export default function RequestsPage() {
                   {matchingOffers.length > 0 && (
                     <div className="mt-4 border-t pt-4">
                       <h3 className="font-semibold text-green-700 mb-3">
-                        🤝 Matching Resources
+                         Matching Resources
                       </h3>
                       {matchingOffers.slice(0, 3).map((offer) => (
                         <div
@@ -269,10 +269,10 @@ export default function RequestsPage() {
                         >
                           <p className="font-medium">{offer.name}</p>
                           <p className="text-sm text-gray-600">
-                            📞 {offer.phone}
+                             {offer.phone}
                           </p>
                           <p className="text-sm text-gray-600">
-                            📍 {offer.city}
+                             {offer.city}
                           </p>
                         </div>
                       ))}
@@ -289,7 +289,7 @@ export default function RequestsPage() {
                         : "bg-gray-300 text-gray-600 cursor-not-allowed"
                     }`}
                   >
-                    {req.status === "open" ? "🤝 I Can Help" : "Already Assigned"}
+                    {req.status === "open" ? " I Can Help" : "Already Assigned"}
                   </button>
                 </div>
               );

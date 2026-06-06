@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function HomePage() {
   const categories = [
     {
-      emoji: "🩸",
+      emoji: "",
       title: "Blood Donation",
       description: "Find blood donors quickly during emergencies.",
       link: "/requests?category=blood",
@@ -11,7 +11,7 @@ export default function HomePage() {
       badge: "bg-red-100 text-red-700",
     },
     {
-      emoji: "💊",
+      emoji: "",
       title: "Medicines",
       description: "Request or provide urgent medicines.",
       link: "/requests?category=medicine",
@@ -19,7 +19,7 @@ export default function HomePage() {
       badge: "bg-blue-100 text-blue-700",
     },
     {
-      emoji: "🚗",
+      emoji: "",
       title: "Transport",
       description: "Emergency transport and ambulance support.",
       link: "/requests?category=transport",
@@ -27,7 +27,7 @@ export default function HomePage() {
       badge: "bg-yellow-100 text-yellow-700",
     },
     {
-      emoji: "🍱",
+      emoji: "",
       title: "Food Support",
       description: "Food assistance during disasters and crises.",
       link: "/requests?category=food",
@@ -35,7 +35,7 @@ export default function HomePage() {
       badge: "bg-orange-100 text-orange-700",
     },
     {
-      emoji: "🏠",
+      emoji: "",
       title: "Shelter",
       description: "Temporary accommodation and safe shelters.",
       link: "/requests?category=shelter",
@@ -43,7 +43,7 @@ export default function HomePage() {
       badge: "bg-green-100 text-green-700",
     },
     {
-      emoji: "🤝",
+      emoji: "",
       title: "Volunteers",
       description: "Connect with people ready to help right now.",
       link: "/requests",
@@ -53,14 +53,14 @@ export default function HomePage() {
   ];
 
   const quickLinks = [
-    { href: "/request", emoji: "🚨", label: "Request Help", desc: "Submit an emergency request" },
-    { href: "/offer", emoji: "💛", label: "Offer Help", desc: "Register as a resource provider" },
-    { href: "/requests", emoji: "📋", label: "Volunteer Board", desc: "See all open requests" },
-    { href: "/resources", emoji: "📚", label: "Resources", desc: "Guides & emergency info" },
-    { href: "/directory", emoji: "📞", label: "Emergency Contacts", desc: "Hospitals, helplines & more" },
-    { href: "/volunteer", emoji: "🙋", label: "Become a Volunteer", desc: "Join our responder network" },
-    { href: "/my-requests", emoji: "📝", label: "My Requests", desc: "Track your submitted requests" },
-    { href: "/dashboard", emoji: "📊", label: "Dashboard", desc: "Your activity & stats" },
+    { href: "/request", emoji: "", label: "Request Help", desc: "Submit an emergency request" },
+    { href: "/offer", emoji: "", label: "Offer Help", desc: "Register as a resource provider" },
+    { href: "/requests", emoji: "", label: "Emergency Requests", desc: "See all open requests" },
+    { href: "/resources", emoji: "", label: "Available Resources", desc: "Guides & emergency info" },
+    { href: "/directory", emoji: "", label: "Emergency Contacts", desc: "Hospitals, helplines & more" },
+    { href: "/volunteer", emoji: "", label: "Become a Volunteer", desc: "Join our responder network" },
+    { href: "/my-requests", emoji: "", label: "My Requests", desc: "Track your submitted requests" },
+    { href: "/dashboard", emoji: "", label: "Dashboard", desc: "Your activity & stats" },
   ];
 
   return (
@@ -92,12 +92,12 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/request">
               <button className="px-8 py-4 bg-red-600 text-white rounded-2xl font-bold text-lg hover:bg-red-700 transition shadow-lg shadow-red-200">
-                🚨 Request Emergency Help
+                 Request Emergency Help
               </button>
             </Link>
             <Link href="/offer">
               <button className="px-8 py-4 bg-white border-2 border-gray-200 text-gray-800 rounded-2xl font-bold text-lg hover:border-red-300 hover:bg-red-50 transition">
-                💛 Offer Your Help
+                 Offer Your Help
               </button>
             </Link>
           </div>
@@ -113,10 +113,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-6 py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "127", label: "Active Requests", color: "text-red-600" },
-            { value: "58", label: "Volunteers Online", color: "text-blue-600" },
-            { value: "342", label: "People Helped", color: "text-green-600" },
-            { value: "12", label: "Cities Covered", color: "text-purple-600" },
+            { value: "150+", label: "Active Requests", color: "text-red-600" },
+            { value: "58+", label: "Volunteers Online", color: "text-blue-600" },
+            { value: "550+", label: "People Helped", color: "text-green-600" },
+            { value: "190+", label: "Cities Covered", color: "text-purple-600" },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -208,7 +208,7 @@ export default function HomePage() {
               Life-threatening situation?
             </span>
             <h2 className="text-4xl md:text-5xl font-extrabold">
-              🚨 Trigger SOS Alert
+               Trigger SOS Alert
             </h2>
             <p className="mt-4 text-red-100 max-w-xl mx-auto text-lg">
               Send a high-priority SOS that instantly notifies all available
@@ -239,19 +239,19 @@ export default function HomePage() {
             {[
               {
                 step: "01",
-                icon: "📝",
+                icon: "",
                 title: "Submit a Request",
                 desc: "Fill out a simple form with your location, category, and urgency. No account needed.",
               },
               {
                 step: "02",
-                icon: "📢",
+                icon: "",
                 title: "Community Notified",
                 desc: "Registered volunteers and resource providers in your area see the request instantly.",
               },
               {
                 step: "03",
-                icon: "🤝",
+                icon: "",
                 title: "Help Arrives",
                 desc: "A volunteer accepts your request and coordinates directly with you to resolve it.",
               },

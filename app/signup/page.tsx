@@ -16,26 +16,26 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    // 1. Create auth user
+    const { data: authData, error: authError } =
+      await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    if (error) {
-      alert(error.message);
+    if (authError) {
+      alert(authError.message);
       return;
     }
 
-    const user = data.user;
-    await supabase.from("profiles").insert([
-  {
-    id: user.id,
-    full_name: fullName,
-    phone,
-    role,
-  },
-]);
+    const user = authData?.user;
 
+    if (!user) {
+      alert("Signup failed. Please try again.");
+      return;
+    }
+
+    // 2. Create profile in DB
     const { error: profileError } = await supabase
       .from("profiles")
       .insert([
@@ -52,17 +52,18 @@ export default function Signup() {
       return;
     }
 
-    alert("Signup successful!");
-    router.push("/login");
+    // 3. Go to homepage (user is already logged in if email confirm OFF)
+    alert("Account created successfully!");
+    router.push("/");
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50">
       <form
         onSubmit={handleSignup}
-        className=" p-6 rounded-xl shadow-md w-96 space-y-3"
+        className="p-6 rounded-xl shadow-md w-96 space-y-3 bg-white"
       >
-        <h1 className="text-xl font-bold">Signup</h1>
+        <h1 className="text-xl font-bold">Create Account</h1>
 
         <input
           className="w-full border p-2"
@@ -91,14 +92,15 @@ export default function Signup() {
 
         <select
           className="w-full border p-2"
+          value={role}
           onChange={(e) => setRole(e.target.value)}
         >
           <option value="user">User</option>
           <option value="volunteer">Volunteer</option>
         </select>
 
-        <button className="bg-blue-500 text-white w-full p-2 rounded">
-          Create Account
+        <button className="bg-blue-600 text-white w-full p-2 rounded">
+          Sign Up
         </button>
       </form>
     </div>

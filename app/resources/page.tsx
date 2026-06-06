@@ -45,21 +45,26 @@ export default function OffersPage() {
   }, []);
 
   const fetchOffers = async () => {
+  try {
     setLoading(true);
 
     const { data, error } = await supabase
-      .from("resource_offers")
+      .from("offers")
       .select("*")
-      .order("created_at", {
-        ascending: false,
-      });
+      .order("created_at", { ascending: false });
 
-    if (!error) {
-      setOffers(data || []);
-    }
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
 
+    if (error) throw error;
+
+    setOffers(data || []);
+  } catch (err) {
+    console.error("Fetch error:", err);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   const filteredOffers =
     filter === "all"
@@ -84,7 +89,7 @@ export default function OffersPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
 
         <h1 className="text-4xl font-bold mb-2">
-          🤝 Available Resources
+           Available Resources
         </h1>
 
         <p className="text-gray-600 mb-8">
@@ -143,15 +148,15 @@ export default function OffersPage() {
                 </div>
 
                 <p>
-                  <strong>👤</strong> {offer.name}
+                  <strong></strong> {offer.name}
                 </p>
 
                 <p>
-                  <strong>📞</strong> {offer.phone}
+                  <strong></strong> {offer.phone}
                 </p>
 
                 <p>
-                  <strong>📍</strong> {offer.city}, {offer.state}
+                  <strong></strong> {offer.city}, {offer.state}
                 </p>
 
                 <p className="text-sm text-gray-500">

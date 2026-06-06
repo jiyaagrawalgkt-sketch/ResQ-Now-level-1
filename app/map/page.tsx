@@ -32,6 +32,7 @@ export default function MapPage() {
   const [search, setSearch] = useState("");
   const [cityFilter, setCityFilter] = useState("all");
   const [stateFilter, setStateFilter] = useState("all");
+  const [selectedCity, setSelectedCity] = useState("all");
 
   useEffect(() => {
     fetchRequests();
@@ -122,7 +123,7 @@ export default function MapPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold">
-          🗺️ Emergency Resource Map
+           Emergency Resource Map
         </h1>
 
         <p className="text-gray-600 mt-2">
@@ -265,6 +266,7 @@ export default function MapPage() {
 </div>
 
 
+
       {/* Map + Sidebar */}
       <div className="grid lg:grid-cols-3 gap-6">
 
@@ -279,7 +281,7 @@ export default function MapPage() {
         <div className="bg-white rounded-xl shadow p-5 max-h-[600px] overflow-y-auto">
 
           <h2 className="font-bold text-xl mb-4">
-            🚨 Live Requests
+             Live Requests
           </h2>
 
           {filteredRequests.length === 0 ? (

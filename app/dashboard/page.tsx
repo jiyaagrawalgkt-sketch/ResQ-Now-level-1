@@ -87,13 +87,13 @@ export default function DashboardPage() {
 
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-4xl font-bold">Welcome Back 👋</h1>
+        <h1 className="text-4xl font-bold">Welcome Back </h1>
         <p className="text-gray-600 mt-2">{user.email}</p>
       </div>
 
       {/* ── MY REQUESTS STATS ── */}
       <h2 className="text-xl font-bold mb-4 text-gray-700">
-        📋 My Requests
+         My Requests
       </h2>
       <div className="grid md:grid-cols-3 gap-6 mb-4">
 
@@ -116,7 +116,7 @@ export default function DashboardPage() {
 
       {/* ── VOLUNTEER STATS ── */}
       <h2 className="text-xl font-bold mb-4 text-gray-700">
-        🤝 My Volunteer Activity
+         My Volunteer Activity
       </h2>
       <div className="grid md:grid-cols-3 gap-6 mb-10">
 
@@ -150,19 +150,19 @@ export default function DashboardPage() {
 
           <Link href="/request">
             <button className="bg-red-600 text-white px-5 py-3 rounded-xl">
-              🚨 Create Request
+               Create Request
             </button>
           </Link>
 
           <Link href="/requests">
             <button className="bg-blue-600 text-white px-5 py-3 rounded-xl">
-              📢 Volunteer Board
+               Volunteer Board
             </button>
           </Link>
 
           <Link href="/profile">
             <button className="bg-gray-800 text-white px-5 py-3 rounded-xl">
-              👤 Profile
+               Profile
             </button>
           </Link>
 
@@ -208,7 +208,7 @@ export default function DashboardPage() {
 
       {/* Accepted Requests (Volunteer) */}
       <div className="bg-white shadow rounded-2xl p-6 mb-10">
-        <h2 className="text-2xl font-bold mb-6">🚨 Requests I'm Helping With</h2>
+        <h2 className="text-2xl font-bold mb-6"> Requests I'm Helping With</h2>
 
         {acceptedRequests.length === 0 ? (
           <p className="text-gray-500">You haven't accepted any requests yet.</p>
@@ -237,7 +237,7 @@ export default function DashboardPage() {
 
       {/* My Resource Offers */}
       <div className="bg-white shadow rounded-2xl p-6">
-        <h2 className="text-2xl font-bold mb-6">🤝 My Resource Offers</h2>
+        <h2 className="text-2xl font-bold mb-6"> My Resource Offers</h2>
 
         {offers.length === 0 ? (
           <p className="text-gray-500">You haven't offered any resources yet.</p>

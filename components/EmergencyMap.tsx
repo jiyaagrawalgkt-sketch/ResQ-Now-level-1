@@ -41,14 +41,20 @@ export default function EmergencyMap({ requests }: any) {
       />
 
       {requests
-        .filter((req: any) => req.latitude && req.longitude)
-        .map((req: any) => (
-          <Marker
-            key={req.id}
-            position={[
-              Number(req.latitude),
-              Number(req.longitude),
-            ]}
+  .filter(
+  (req: any) =>
+    req.latitude !== null &&
+    req.longitude !== null &&
+    !isNaN(Number(req.latitude)) &&
+    !isNaN(Number(req.longitude))
+)
+  .map((req: any) => (
+    <Marker
+      key={req.id}
+      position={[
+        Number(req.latitude),
+        Number(req.longitude),
+      ]}
             icon={
               req.is_sos
                 ? redIcon
@@ -60,12 +66,12 @@ export default function EmergencyMap({ requests }: any) {
             <Popup>
               <div className="space-y-2">
                 <h3 className="font-bold">{req.category}</h3>
-                <p>📍 {req.city}, {req.state}</p>
+                <p> {req.city}, {req.state}</p>
                 <p>{req.description}</p>
                 <p>Status: {req.status}</p>
                 {req.is_sos && (
                   <p className="text-red-600 font-bold">
-                    🚨 SOS Priority
+                     SOS Priority
                   </p>
                 )}
               </div>

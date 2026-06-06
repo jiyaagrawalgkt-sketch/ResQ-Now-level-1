@@ -31,7 +31,7 @@ export default function DirectoryPage() {
     <div className="max-w-7xl mx-auto p-6">
 
       <h1 className="text-4xl font-bold mb-2">
-        📍 Emergency Directory
+         Emergency Directory
       </h1>
 
       <p className="text-gray-600 mb-8">
@@ -97,7 +97,7 @@ export default function DirectoryPage() {
               href={`tel:${item.phone}`}
               className="block mt-5 text-center bg-blue-600 text-white py-3 rounded-xl"
             >
-              📞 Call Now
+               Call Now
             </a>
           </div>
         ))}
