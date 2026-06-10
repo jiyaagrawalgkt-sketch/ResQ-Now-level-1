@@ -4,6 +4,9 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function TransportForm() {
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [pickupMode, setPickupMode] = useState<"manual" | "gps" | "">("");
   const [loading, setLoading] = useState(false);
   const [isSOS, setIsSOS] = useState(false);
 
@@ -13,9 +16,6 @@ export default function TransportForm() {
     pickup_location: "",
     destination: "",
     vehicle_needed: "",
-    city: "",
-    state: "",
-    location: "",
     urgency: "high",
     description: "",
   });
@@ -33,70 +33,75 @@ export default function TransportForm() {
     });
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("SUCCESS:", position);
+
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+
+        alert(
+          "Location captured!\n" +
+          "Lat: " + position.coords.latitude + "\n" +
+          "Lng: " + position.coords.longitude
+        );
+      },
+      (error) => {
+        console.log("ERROR:", error);
+
+        alert(
+          "Location failed. Error code: " + error.code +
+          "\n1 = permission denied\n2 = position unavailable\n3 = timeout"
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
 
     try {
-      const searchQuery = form.location?.trim()
-        ? `${form.location}, ${form.city}, ${form.state}`
-        : `${form.city}, ${form.state}`;
+      if (!latitude || !longitude) {
+        alert("Please click 'Use My Current Location' first");
+        return;
+      }
 
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}&limit=1`,
+      const { data: userData } = await supabase.auth.getUser();
+
+      const { error } = await supabase.from("requests").insert([
         {
-          headers: {
-            "User-Agent":
-              "Emergency-Resource-Platform",
-          },
-        }
-      );
-
-      const geoData = await geoRes.json();
-
-      const latitude =
-        geoData?.[0]?.lat
-          ? Number(geoData[0].lat)
-          : null;
-
-      const longitude =
-        geoData?.[0]?.lon
-          ? Number(geoData[0].lon)
-          : null;
-
-      const { data: userData } =
-        await supabase.auth.getUser();
-
-      const { error } =
-        await supabase
-          .from("requests")
-          .insert([
-            {
-              ...form,
-              category: "transport",
-              latitude,
-              longitude,
-              is_sos: isSOS,
-              status: "open",
-              assigned_to: null,
-              user_id:
-                userData.user?.id ||
-                null,
-            },
-          ]);
+          ...form,
+          category: "transport",
+          latitude,
+          longitude,
+          is_sos: isSOS,
+          status: "open",
+          assigned_to: null,
+          user_id: userData.user?.id || null,
+        },
+      ]);
 
       if (error) {
         throw error;
       }
 
-      alert(
-        " Transport Request Submitted Successfully"
-      );
+      alert("Transport Request Submitted Successfully");
 
       setForm({
         name: "",
@@ -104,9 +109,6 @@ export default function TransportForm() {
         pickup_location: "",
         destination: "",
         vehicle_needed: "",
-        city: "",
-        state: "",
-        location: "",
         urgency: "high",
         description: "",
       });
@@ -114,15 +116,14 @@ export default function TransportForm() {
       setIsSOS(false);
     } catch (error: any) {
       console.error(error);
-
-      alert(
-        error.message ||
-          "Something went wrong"
-      );
+      alert(error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
+
+
+
 
   return (
     <form
@@ -130,7 +131,7 @@ export default function TransportForm() {
       className="bg-white p-6 rounded-2xl shadow space-y-4"
     >
       <h2 className="text-2xl font-bold">
-         Transport Request
+        Transport Request
       </h2>
 
       <input
@@ -151,14 +152,68 @@ export default function TransportForm() {
         className="w-full border p-3 rounded-xl"
       />
 
-      <input
-        name="pickup_location"
-        value={form.pickup_location}
-        onChange={handleChange}
-        placeholder="Pickup Location"
-        required
-        className="w-full border p-3 rounded-xl"
-      />
+
+
+      <div className="space-y-2">
+
+        <label>Pickup Location Type</label>
+
+
+
+        <select
+          value={pickupMode}
+          onChange={(e) => {
+            const value = e.target.value;
+            setPickupMode(value);
+
+            if (value === "gps") {
+              setForm((prev) => ({
+                ...prev,
+                pickup_location: "",
+              }));
+            }
+          }}
+          className="w-full border p-3 rounded-xl"
+        >
+          <option value="">Select Pickup Method</option>
+          <option value="manual">Entry Location</option>
+          <option value="gps">📍 GPS Location</option>
+        </select>
+
+
+
+        {pickupMode === "manual" && (
+          <input
+            name="pickup_location"
+            value={form.pickup_location}
+            onChange={handleChange}
+            placeholder="Enter pickup location"
+            className="w-full border p-3 rounded-xl"
+            required
+          />
+        )}
+
+        {pickupMode === "gps" && (
+          <div>
+            <button
+              type="button"
+              onClick={getCurrentLocation}
+              className="w-full bg-green-600 text-white p-3 rounded-xl"
+            >
+              📍 GPS
+            </button>
+
+            {latitude && longitude && (
+              <p className="text-green-600 text-sm">
+                ✅ Location captured successfully
+              </p>
+            )}
+          </div>
+        )}
+
+      </div>
+
+
 
       <input
         name="destination"
@@ -196,33 +251,9 @@ export default function TransportForm() {
         </option>
       </select>
 
-      <input
-        name="city"
-        value={form.city}
-        onChange={handleChange}
-        placeholder="City"
-        required
-        className="w-full border p-3 rounded-xl"
-      />
 
-      <input
-        name="state"
-        value={form.state}
-        onChange={handleChange}
-        placeholder="State"
-        required
-        className="w-full border p-3 rounded-xl"
-      />
 
-      <input
-        name="location"
-        value={form.location}
-        onChange={handleChange}
-        placeholder="Exact Location"
-        className="w-full border p-3 rounded-xl"
-      />
-
-       <select
+      <select
         name="urgency"
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
@@ -232,7 +263,7 @@ export default function TransportForm() {
         <option value="medium">Medium</option>
         <option value="low">Low</option>
       </select>
-      
+
       <textarea
         name="description"
         value={form.description}

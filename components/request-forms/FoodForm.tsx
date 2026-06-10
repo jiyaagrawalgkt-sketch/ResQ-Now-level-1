@@ -4,6 +4,8 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function FoodRequestPage() {
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [isSOS, setIsSOS] = useState(false);
 
@@ -12,9 +14,6 @@ export default function FoodRequestPage() {
     phone: "",
     food_type: "",
     quantity: "",
-    city: "",
-    state: "",
-    location: "",
     urgency: "high",
     description: "",
   });
@@ -32,6 +31,47 @@ export default function FoodRequestPage() {
     });
   };
 
+
+
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("SUCCESS:", position);
+
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+
+        alert(
+          "Location captured!\n" +
+          "Lat: " + position.coords.latitude + "\n" +
+          "Lng: " + position.coords.longitude
+        );
+      },
+      (error) => {
+        console.log("ERROR:", error);
+
+        alert(
+          "Location failed. Error code: " + error.code +
+          "\n1 = permission denied\n2 = position unavailable\n3 = timeout"
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+
+
+
   const handleSubmit = async (
     e: React.FormEvent
   ) => {
@@ -40,33 +80,11 @@ export default function FoodRequestPage() {
     setLoading(true);
 
     try {
-      const searchQuery = form.location?.trim()
-        ? `${form.location}, ${form.city}, ${form.state}`
-        : `${form.city}, ${form.state}`;
+      if (!latitude || !longitude) {
+        alert("Please click 'Use My Current Location' first");
+        return;
+      }
 
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}&limit=1`,
-        {
-          headers: {
-            "User-Agent":
-              "Emergency-Resource-Platform",
-          },
-        }
-      );
-
-      const geoData = await geoRes.json();
-
-      const latitude =
-        geoData?.[0]?.lat
-          ? Number(geoData[0].lat)
-          : null;
-
-      const longitude =
-        geoData?.[0]?.lon
-          ? Number(geoData[0].lon)
-          : null;
 
       const { data: userData } =
         await supabase.auth.getUser();
@@ -79,9 +97,6 @@ export default function FoodRequestPage() {
               category: "food",
               name: form.name,
               phone: form.phone,
-              city: form.city,
-              state: form.state,
-              location: form.location,
               urgency: form.urgency,
 
               food_type: form.food_type,
@@ -120,9 +135,6 @@ ${form.description}
         phone: "",
         food_type: "",
         quantity: "",
-        city: "",
-        state: "",
-        location: "",
         urgency: "high",
         description: "",
       });
@@ -133,7 +145,7 @@ ${form.description}
 
       alert(
         error.message ||
-          "Something went wrong"
+        "Something went wrong"
       );
     } finally {
       setLoading(false);
@@ -146,7 +158,7 @@ ${form.description}
       className="bg-white p-6 rounded-2xl shadow space-y-4"
     >
       <h2 className="text-2xl font-bold">
-         Food Request
+        Food Request
       </h2>
 
       <input
@@ -207,34 +219,24 @@ ${form.description}
         className="w-full border p-3 rounded-xl"
       />
 
-      <input
-        name="city"
-        value={form.city}
-        placeholder="City"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-        required
-      />
 
-      <input
-        name="state"
-        value={form.state}
-        placeholder="State"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-        required
-      />
+      <button
+        type="button"
+        onClick={getCurrentLocation}
+        className="w-full bg-blue-600 text-white p-3 rounded-xl"
+      >
+        📍 Use My Current Location
+      </button>
 
-      <input
-        name="location"
-        value={form.location}
-        placeholder="Exact Location"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-        required
-      />
+      {latitude && longitude && (
+        <p className="text-green-600 text-sm">
+          ✅ Location captured successfully
+        </p>
+      )}
 
-       <select
+
+
+      <select
         name="urgency"
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"

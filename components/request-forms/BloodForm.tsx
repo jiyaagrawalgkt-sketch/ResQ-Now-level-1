@@ -4,6 +4,8 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function BloodRequestPage() {
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isSOS, setIsSOS] = useState(false);
 
@@ -13,9 +15,6 @@ export default function BloodRequestPage() {
     blood_group: "",
     units_required: "",
     hospital_name: "",
-    city: "",
-    state: "",
-    location: "",
     urgency: "high",
     description: "",
   });
@@ -33,6 +32,43 @@ export default function BloodRequestPage() {
     });
   };
 
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("SUCCESS:", position);
+
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+
+        alert(
+          "Location captured!\n" +
+          "Lat: " + position.coords.latitude + "\n" +
+          "Lng: " + position.coords.longitude
+        );
+      },
+      (error) => {
+        console.log("ERROR:", error);
+
+        alert(
+          "Location failed. Error code: " + error.code +
+          "\n1 = permission denied\n2 = position unavailable\n3 = timeout"
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+
   const handleSubmit = async (
     e: React.FormEvent
   ) => {
@@ -41,33 +77,11 @@ export default function BloodRequestPage() {
     setLoading(true);
 
     try {
-      const searchQuery = form.location?.trim()
-        ? `${form.location}, ${form.city}, ${form.state}`
-        : `${form.city}, ${form.state}`;
+      if (!latitude || !longitude) {
+        alert("Please click 'Use My Current Location' first");
+        return;
+      }
 
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}&limit=1`,
-        {
-          headers: {
-            "User-Agent":
-              "Emergency-Resource-Platform",
-          },
-        }
-      );
-
-      const geoData = await geoRes.json();
-
-      const latitude =
-        geoData?.[0]?.lat
-          ? Number(geoData[0].lat)
-          : null;
-
-      const longitude =
-        geoData?.[0]?.lon
-          ? Number(geoData[0].lon)
-          : null;
 
       const { data: userData } =
         await supabase.auth.getUser();
@@ -89,10 +103,6 @@ export default function BloodRequestPage() {
               hospital_name:
                 form.hospital_name,
 
-              city: form.city,
-              state: form.state,
-              location:
-                form.location,
 
               urgency:
                 form.urgency,
@@ -132,9 +142,6 @@ ${form.description}
         blood_group: "",
         units_required: "",
         hospital_name: "",
-        city: "",
-        state: "",
-        location: "",
         urgency: "high",
         description: "",
       });
@@ -145,7 +152,7 @@ ${form.description}
 
       alert(
         error.message ||
-          "Something went wrong"
+        "Something went wrong"
       );
     } finally {
       setLoading(false);
@@ -155,7 +162,7 @@ ${form.description}
   return (
     <div className="bg-white p-6 rounded-2xl shadow space-y-4">
       <h1 className="text-4xl font-bold mb-6">
-         Blood Request
+        Blood Request
       </h1>
 
       <form
@@ -240,45 +247,32 @@ ${form.description}
           className="w-full border p-3 rounded"
         />
 
-        <input
-          name="city"
-          value={form.city}
-          placeholder="City"
+        <button
+          type="button"
+          onClick={getCurrentLocation}
+          className="w-full bg-blue-600 text-white p-3 rounded-xl"
+        >
+          📍 Use My Current Location
+        </button>
+
+        {latitude && longitude && (
+          <p className="text-green-600 text-sm">
+            ✅ Location captured successfully
+          </p>
+        )}
+
+        <select
+          name="urgency"
           onChange={handleChange}
-          className="w-full border p-3 rounded"
-          required
-        />
+          className="w-full border p-3 rounded-xl"
+        >
+          <option value="">Urgency</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
 
-        <input
-          name="state"
-          value={form.state}
-          placeholder="State"
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-          required
-        />
 
-        <input
-          name="location"
-          value={form.location}
-          placeholder="Exact Location"
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-          required
-        />
-
-         <select
-        name="urgency"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-      >
-        <option value="">Urgency</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-      </select>
-
-    
 
         <textarea
           name="description"
