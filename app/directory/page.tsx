@@ -15,7 +15,7 @@ export default function DirectoryPage() {
     const { data } = await supabase
       .from("emergency_directory")
       .select("*")
-      .order("name");
+      .order("Name");
 
     setItems(data || []);
   };
@@ -35,17 +35,18 @@ export default function DirectoryPage() {
       </h1>
 
       <p className="text-gray-600 mb-8">
-        Hospitals, NGOs, Blood Banks &
+        Hospitals, NGOs, Blood Banks, Medical Store &
         Shelters
       </p>
 
       <div className="flex flex-wrap gap-3 mb-8">
 
         {[
-          "all",
+          "All",
           "Hospital",
           "NGO",
           "Blood Bank",
+          "Medical Store",
           "Shelter",
         ].map((item) => (
           <button
@@ -71,7 +72,7 @@ export default function DirectoryPage() {
             className="bg-white p-6 rounded-2xl shadow"
           >
             <h2 className="text-xl font-bold mb-3">
-              {item.name}
+              {item.Name}
             </h2>
 
             <p>
@@ -80,8 +81,8 @@ export default function DirectoryPage() {
             </p>
 
             <p>
-              <strong>Phone:</strong>{" "}
-              {item.phone}
+              <strong>Contact:</strong>{" "}
+              {item.Contact}
             </p>
 
             <p>
@@ -89,12 +90,22 @@ export default function DirectoryPage() {
               {item.city}
             </p>
 
+            <p>
+              <strong>Type:</strong>{" "}
+              {item.Type}
+            </p>
+
+            <p>
+              <strong>pincode:</strong>{" "}
+              {item.pincode}
+            </p>
+
             <p className="mt-2">
               {item.address}
             </p>
 
             <a
-              href={`tel:${item.phone}`}
+              href={`tel:${item.Contact}`}
               className="block mt-5 text-center bg-blue-600 text-white py-3 rounded-xl"
             >
                Call Now
