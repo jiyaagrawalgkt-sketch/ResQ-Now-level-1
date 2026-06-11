@@ -4,6 +4,8 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function MedicineOfferForm() {
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [isSOS, setIsSOS] = useState(false);
 
@@ -12,12 +14,11 @@ export default function MedicineOfferForm() {
     phone: "",
     medicine_type: "",
     medicine_name: "",
-    city: "",
-    state: "",
-    location: "",
     urgency: "high",
     description: "",
   });
+
+
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -27,59 +28,94 @@ export default function MedicineOfferForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation not supported");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+
+        alert(
+          `Location captured!\nLat: ${position.coords.latitude}\nLng: ${position.coords.longitude}`
+        );
+      },
+      (error) => {
+        console.log(error);
+        alert("Location access failed");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const searchQuery = form.location?.trim()
-  ? `${form.location}, ${form.city}, ${form.state}`
-  : `${form.city}, ${form.state}`;
+      if (latitude === null || longitude === null){
+        alert("Please click 'Use My Current Location' first");
+        setLoading(false);
+        return;
+      }
 
-const geoRes = await fetch(
-  `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-    searchQuery
-  )}&limit=1`,
-  {
-    headers: {
-      "User-Agent": "Emergency-Resource-Platform",
-    },
-  }
-);
+      // Get logged-in user
+      const { data: userData } = await supabase.auth.getUser();
 
-      const geoData = await geoRes.json();
-      const user = await supabase.auth.getUser();
-
+      // Insert into Supabase
       const { error } = await supabase.from("offers").insert([
         {
           ...form,
           category: "medicine",
-          latitude: geoData?.[0]
-  ? Number(geoData[0].lat)
-  : null,
-
-longitude: geoData?.[0]
-  ? Number(geoData[0].lon)
-  : null,
+          latitude,
+          longitude,
           is_sos: isSOS,
           status: "open",
           assigned_to: null,
-          user_id: user.data.user?.id || null,
+          user_id: userData.user?.id || null,
         },
       ]);
 
+      // Handle Supabase error
       if (error) {
-        alert(error.message);
-        return;
+        throw error;
       }
 
-      alert(" Medicine Offer Submitted");
-    } catch {
-      alert("Something went wrong");
-    }
+      alert("Medicine Offer Submitted Successfully");
 
-    setLoading(false);
+
+      setForm({
+        name: "",
+        phone: "",
+        medicine_type: "",
+        medicine_name: "",
+        urgency: "high",
+        description: "",
+      });
+
+
+      setLatitude(null);
+      setLongitude(null);
+      setIsSOS(false);
+    } catch (error: any) {
+      console.log(error);
+      alert(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   return (
     <form
@@ -90,6 +126,7 @@ longitude: geoData?.[0]
 
       <input
         name="name"
+        value={form.name}
         placeholder="Full Name"
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
@@ -98,6 +135,7 @@ longitude: geoData?.[0]
 
       <input
         name="phone"
+        value={form.phone}
         placeholder="Phone Number"
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
@@ -106,6 +144,7 @@ longitude: geoData?.[0]
 
       <select
         name="medicine_type"
+        value={form.medicine_type}
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
       >
@@ -115,38 +154,35 @@ longitude: geoData?.[0]
         <option value="Homeopathic">Homeopathic</option>
       </select>
 
+
       <input
         name="medicine_name"
+        value={form.medicine_name}
         placeholder="Medicine Name (or 'General Supplies')"
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
       />
 
-      <input
-        name="city"
-        placeholder="City"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-        required
-      />
+      <button
+        type="button"
+        onClick={getCurrentLocation}
+        className="w-full bg-green-600 text-white py-3 rounded-xl"
+      >
+        📍 Use My Current Location
+      </button>
 
-      <input
-        name="state"
-        placeholder="State"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-        required
-      />
 
-      <input
-        name="location"
-        placeholder="Exact Location / Pickup Point"
-        onChange={handleChange}
-        className="w-full border p-3 rounded-xl"
-      />
+      {latitude && longitude && (
+        <p className="text-green-600 text-sm">
+          ✅ Location captured successfully
+        </p>
+      )}
 
-       <select
+
+
+      <select
         name="urgency"
+        value={form.urgency}
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
       >
@@ -156,15 +192,17 @@ longitude: geoData?.[0]
         <option value="low">Low</option>
       </select>
 
+
       <textarea
         name="description"
+        value={form.description}
         placeholder="Describe the medicines/supplies you can offer"
         rows={4}
         onChange={handleChange}
         className="w-full border p-3 rounded-xl"
       />
 
-      
+
 
       <button
         disabled={loading}
