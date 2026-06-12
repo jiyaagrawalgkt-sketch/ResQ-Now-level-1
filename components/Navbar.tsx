@@ -35,7 +35,6 @@ export default function Navbar() {
     { href: "/requests", label: " Live Requests" },
     { href: "/map", label: " Emergency Map" },
     { href: "/directory", label: " Contacts" },
-    { href: "/review", label: " Review" },
     { href: "/dashboard", label: " Dashboard" },
   ];
 
