@@ -13,12 +13,14 @@ export default function Navbar() {
   }, []);
 
   async function getUser() {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    setUser(user);
-  }
+  console.log(user);
+
+  setUser(user);
+}
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -33,6 +35,7 @@ export default function Navbar() {
     { href: "/requests", label: " Live Requests" },
     { href: "/map", label: " Emergency Map" },
     { href: "/directory", label: " Contacts" },
+    { href: "/review", label: " Review" },
     { href: "/dashboard", label: " Dashboard" },
   ];
 
@@ -65,7 +68,20 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
 
           {user ? (
-            <>
+  <>
+
+   {user?.email === "admin@gmail.com" && (
+  <Link
+    href="/admin"
+    className="text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition"
+  >
+    Admin
+  </Link>
+)}
+
+    <span>
+      {user.email}
+    </span>
               <span className="hidden md:block text-sm text-gray-500 max-w-[180px] truncate">
                 {user.name}
               </span>
@@ -131,6 +147,15 @@ export default function Navbar() {
 
           {user ? (
             <>
+            {user.email === "admin@gmail.com" && (
+  <Link
+    href="/admin"
+    onClick={() => setMenuOpen(false)}
+    className="px-3 py-2 rounded-lg hover:bg-red-50"
+  >
+    Admin
+  </Link>
+)}
               <Link
                 href="/profile"
                 onClick={() => setMenuOpen(false)}
